@@ -1,35 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import LoginService from "./services/LoginService";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+interface LoginResponse {
+  success: boolean;
+  message: string;
+  user?: { id: number; username: string; password: string };
 }
 
-export default App
+const App: React.FC = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [response, setResponse] = useState<LoginResponse | null>(null);
+
+  const handleLogin = async () => {
+    // Garante envio correto de strings mesmo se estiverem vazias
+    const loginPayload = {
+      username: username || "",
+      password: password || "",
+    };
+
+    try {
+      const res = await LoginService.login(loginPayload);
+      setResponse(res);
+    } catch {
+      setResponse({ success: false, message: "Erro de conexão" });
+    }
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1>Demo de SQL Injection - Login Vulnerável</h1>
+      <p>
+        <strong>Credenciais válidas:</strong> admin/secret ou user/pass
+      </p>
+      <p>
+        <strong>Payload para testar Injection:</strong> Username:{" "}
+        <code>' OR '1'='1</code> (' OR '1'='1 Como senha)
+      </p>
+
+      <input
+        type="text"
+        placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        style={{ margin: "5px", padding: "5px" }}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        style={{ margin: "5px", padding: "5px" }}
+      />
+      <br />
+      <button onClick={handleLogin} style={{ margin: "5px", padding: "10px" }}>
+        Login
+      </button>
+
+      {response && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>Resposta:</h3>
+          <p>{response.message}</p>
+          {response.success && response.user && (
+            <p>Usuário logado: {response.user.username}</p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
