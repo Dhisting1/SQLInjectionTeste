@@ -35,7 +35,11 @@ const App: React.FC = () => {
       </p>
       <p>
         <strong>Payload para testar Injection:</strong> Username:{" "}
-        <code>' OR '1'='1</code> (' OR '1'='1 Como senha)
+        <code>' OR '1'='1</code> ( Usar tbm como senha: ' OR '1'='1 Como senha)
+        <code>
+          ' OR username='user' -- (Para acessar o segundo usuario, utilize ' OR
+          username='user' -- com senha tambem)
+        </code>
       </p>
 
       <input
