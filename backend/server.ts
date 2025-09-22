@@ -53,7 +53,7 @@ app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
   // VULNERÁVEL: SQL Injection
-  // const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
+  // const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`; //Query dando erro ao inserir o SQL INJECTION
   const query =
     "SELECT * FROM users WHERE username = '" +
     username +

@@ -1,0 +1,96 @@
+# SQL Injection Teste 🎓
+
+Projeto acadêmico para demonstrar **SQL Injection** e como preveni-lo.
+
+---
+
+## 🖥 Arquitetura do Projeto
+
+[Frontend React + Vite] ---> [Backend Node.js + Express] ---> [PostgreSQL Docker]
+(http:3000) (http:3001) (5432)
+
+
+
+
+- **Frontend:** interface do usuário
+- **Backend:** processa login e consulta banco
+- **PostgreSQL:** armazena usuários
+
+Todos os serviços estão rodando em **containers Docker**, conectados pela mesma **rede (`app-network`)**.
+
+---
+
+## ⚡ Tecnologias Utilizadas
+
+- **Frontend:** React + Vite + TypeScript + Axios  
+- **Backend:** Node.js + Express + TypeScript + pg + pg-pool + CORS  
+- **Banco:** PostgreSQL 15 (dockerizado)  
+- **Containerização:** Docker + Docker Compose  
+
+---
+
+## 🔄 Fluxo de Login
+
+1. Usuário envia **login e senha** no frontend.
+2. Backend recebe os dados e executa **query SQL** no banco.
+3. Banco retorna o usuário se **credenciais estiverem corretas**.
+4. Frontend exibe mensagem de sucesso ou erro.
+
+> ⚠️ **Vulnerabilidade:** query concatenada permite SQL Injection:
+```sql
+SELECT * FROM users WHERE username = 'INPUT' AND password = 'INPUT';
+✅ Segura: query parametrizada previne ataques:
+
+sql
+
+SELECT * FROM users WHERE username = $1 AND password = $2;
+🚀 Rodando o Projeto
+Com Docker (recomendado)
+bash
+
+docker compose up --build
+Frontend: http://localhost:3000
+
+Backend: http://localhost:3001
+
+Sem Docker (opcional)
+bash
+
+# Backend
+cd backend
+npm install
+npm run start
+
+# Frontend
+cd frontend
+npm install
+npm run dev
+👨‍💻 Usuários de Teste
+Usuário	Senha
+admin	secret
+user	pass
+
+Payload de SQL Injection (para demonstração):
+json
+
+{
+  "username": "' OR '1'='1",
+  "password": "' OR '1'='1"
+}
+🔒 Aprendizados
+Importância de queries parametrizadas.
+
+Entendimento do fluxo de dados entre frontend, backend e banco.
+
+Demonstração prática de SQL Injection para fins educativos.
+
+📦 Diagrama de Containers Docker
+lua
+
++--------------------+      +----------------------+      +----------------------+
+| Frontend (3000)    | ---> | Backend (3001)      | ---> | PostgreSQL (5432)   |
+| React + Vite       |      | Node.js + Express   |      | Banco de usuários    |
++--------------------+      +----------------------+      +----------------------+
+
+Todos conectados pela mesma rede Docker app-network.
+
