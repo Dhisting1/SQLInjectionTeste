@@ -29,7 +29,7 @@ const App: React.FC = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Demo de SQL Injection - Login Vulnerável</h1>
+      <h1>Trabalho SQL Injection</h1>
       <p>
         <strong>Credenciais válidas:</strong> admin/secret ou user/pass
       </p>
