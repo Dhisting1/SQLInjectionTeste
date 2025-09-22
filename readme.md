@@ -131,5 +131,5 @@ docker exec -it sqlinjectionteste-postgres-1 psql -U postgres -d app_db
 
 ---
 
-Fernando - Desenvolvimento Web e Segurança de Aplicações
+Lucas Fernando, Guilherme, Ana Luísa, Carol-  Segurança em Aplicações - Noturno 2025/2
 
